@@ -48,29 +48,30 @@ function advancedMemorized (){
 			if (typeof allArgs[0] == 'function') {
 				var args = [];
 				if (allArgs.length > 1) {
-					var args = [];
 					args = allArgs.slice(1);
+				}
+				if (memory[allArgs[0][args]]) {
+					console.log(memory);
+					console.log("buffered arg  is " +  args);
+					return memory[allArgs[0][args]]
 				}
 				if (!memory[allArgs[0]]) {
 					memory[allArgs[0]] = args;
 				}else{
-					var params = memory[allArgs[0]];
-					params.push(args);
+					var params = memory[allArgs[0]].push(args);
 				}
-				console.log("all rgs----------- " + allArgs);
-				console.log('arg--------------- ' + args);
-
-				console.log(memory);
-				console.log(allArgs[0].apply(this,args));
-
-
-				(memory[allArgs[0]][args]) = allArgs[0].apply(this,args);
-				console.log("in memory------- " + memory[allArgs[0]]);
-				return memory[allArgs[0]][args];
-			};
-		};		
+				console.log("calculate arg  is "  + args);
+				var result = allArgs[0].apply(this,args);
+				memory[allArgs[0][args]] = result;
+				return memory[allArgs[0][args]];
+			}
+		}	
 	}
 }
 
 var b = advancedMemorized();
+console.log(b(factorial,10));
+console.log(b(factorial,11));
+console.log(b(factorial,10));
+console.log(b(factorial,11));
 console.log(b(factorial,3));
