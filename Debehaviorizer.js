@@ -7,17 +7,29 @@ var testObj = {
 	i: 10
 }
 
+var full = {
+	inc : function(arg){
+		return (arg + 1);
+	},
+	i: 10
+}
 
 console.log("------------");
-console.log(dabehavioriz(testObj,true));
+var copyObj = dabehaviorizer(testObj,true);
+console.log("copy -> ");
+console.log(testObj);
+console.log("exist -> ");
 console.log(testObj);
 console.log("------------");
-console.log(dabehavioriz(testObj)[0](2));
+console.log("exist -> ");
+dabehaviorizer(testObj);
+console.log(testObj);
+console.log("------------");
+haviorizer(testObj, full);
+console.log("exist -> ");
 console.log(testObj);
 
-
-
-function dabehavioriz(obj, isBehaviorSeparate) {
+function dabehaviorizer(obj, isBehaviorSeparate) {
 	if (null == obj || "object" != typeof obj) return obj;
 
 	var delFunction = [];
@@ -47,5 +59,24 @@ function dabehavioriz(obj, isBehaviorSeparate) {
 			}
 		}
 	}
-	
 }
+
+
+function haviorizer(toObj,fromObject){
+
+	if (null == toObj || "object" != typeof toObj){
+		return toObj;
+	}
+	if (null == fromObject || "object" != typeof fromObject){
+		return toObj;
+	}
+	for ( var addFunc in fromObject){
+		if (typeof fromObject[addFunc] == 'function') {
+			if (!toObj.hasOwnProperty(addFunc)) {
+				toObj[addFunc] = fromObject[addFunc];
+			}
+		}
+	}
+}
+
+
