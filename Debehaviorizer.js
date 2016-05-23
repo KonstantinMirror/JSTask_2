@@ -1,30 +1,51 @@
 
 
 var testObj = {
-	inc : function(body){
-		return (body + 1);
+	inc : function(arg){
+		return (arg + 1);
 	},
 	i: 10
 }
 
+
+console.log("------------");
+console.log(dabehavioriz(testObj,true));
 console.log(testObj);
-dabehavioriz(testObj);
+console.log("------------");
+console.log(dabehavioriz(testObj)[0](2));
 console.log(testObj);
+
 
 
 function dabehavioriz(obj, isBehaviorSeparate) {
-	for(var name in obj){
-		if (obj.hasOwnProperty(name)) {
-			if (typeof obj[name] == 'object') {
-				dabehavioriz(obj[name])
-			}
-			else if(typeof obj[name] == 'function' ){
-				try{
-					delete obj[name]
-				} catch(ex){
+	if (null == obj || "object" != typeof obj) return obj;
 
+	var delFunction = [];
+	if (isBehaviorSeparate) {
+		var copyObj = (JSON.parse(JSON.stringify(obj)));
+		deleteBehavior(copyObj);
+		return copyObj;
+	}else{
+		deleteBehavior(obj)
+		return delFunction;
+	}
+
+	function deleteBehavior (currentStateObj) {
+		for(var name in currentStateObj){
+			if (currentStateObj.hasOwnProperty(name)) {
+				if (typeof currentStateObj[name] == 'object') {
+					deleteBehavior(currentStateObj[name])
+				}
+				else if(typeof currentStateObj[name] == 'function' ){
+					delFunction.push(currentStateObj[name])
+					try{
+						delete currentStateObj[name]
+					} catch(ex){
+
+					}
 				}
 			}
 		}
 	}
+	
 }
