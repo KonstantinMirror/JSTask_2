@@ -41,26 +41,26 @@ function memorized (){
 }
 
 function advancedMemorized (){
-	var memory = [];
+	var memoryFun = [];
+	var memoryArg = [];
 	return function (){
 		if (arguments.length > 1) {
 			var allArgs = Array.prototype.slice.call(arguments);
-			if (typeof allArgs[0] == 'function') {
-				var args = [];
+			var currentFun = allArgs[0];
+			if (typeof currentFun == 'function') {
+				var argsFun = [];
 				if (allArgs.length > 1) {
-					args = allArgs.slice(1);
+					argsFun = allArgs.slice(1);
 				}
-				if (memory[allArgs[0][args]]) {
-					console.log(memory);
-					console.log("buffered arg  is " +  args);
-					return memory[allArgs[0][args]]
+
+				if (memoryFun[currentFun]) {
+					if (memoryArg[currentFun] == argsFun) {}
+					return memory[allArgs[0]][args]
 				}
 				if (!memory[allArgs[0]]) {
-					memory[allArgs[0]] = args;
-				}else{
-					var params = memory[allArgs[0]].push(args);
+					memory[allArgs[0]] = [];
 				}
-				console.log("calculate arg  is "  + args);
+				memory[allArgs[0]].push(args);
 				var result = allArgs[0].apply(this,args);
 				memory[allArgs[0][args]] = result;
 				return memory[allArgs[0][args]];
