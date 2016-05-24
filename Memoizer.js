@@ -41,6 +41,7 @@ function memorized (){
 }
 
 function advancedMemorized (){
+	var memory = [];
 	var memoryFun = [];
 	var memoryArg = [];
 	return function (){
@@ -48,30 +49,38 @@ function advancedMemorized (){
 			var allArgs = Array.prototype.slice.call(arguments);
 			var currentFun = allArgs[0];
 			if (typeof currentFun == 'function') {
-				var argsFun = [];
+				var param = [];
 				if (allArgs.length > 1) {
-					argsFun = allArgs.slice(1);
+					param = allArgs.slice(1);
 				}
-
-				if (memoryFun[currentFun]) {
-					if (memoryArg[currentFun] == argsFun) {}
-					return memory[allArgs[0]][args]
+				if (! memory[currentFun]) {
+					memory[currentFun] = [];
+					memory[currentFun].push(param); 
+				}else{
+					var temp = [];
+					for(temp in memory[currentFun]){
+						if(temp.toString() == param.toString()){
+							console.log("buffered arg");
+							return memory[currentFun][temp];
+						}
+					}
+					memory[currentFun].push(param);
 				}
-				if (!memory[allArgs[0]]) {
-					memory[allArgs[0]] = [];
-				}
-				memory[allArgs[0]].push(args);
-				var result = allArgs[0].apply(this,args);
-				memory[allArgs[0][args]] = result;
-				return memory[allArgs[0][args]];
-			}
-		}	
-	}
+				memory[currentFun][param] = currentFun.apply(this,param);
+				console.log("calculate arg");
+				return memory[currentFun][param]
+		}
+	}	
+}
 }
 
 var b = advancedMemorized();
-console.log(b(factorial,10));
-console.log(b(factorial,11));
-console.log(b(factorial,10));
-console.log(b(factorial,11));
-console.log(b(factorial,3));
+console.log(b(factorial,10,10,10));
+console.log('**********************');
+console.log(b(factorial,10,10,10));
+console.log('**********************');
+console.log(b(factorial,10,10,10,10));
+console.log('**********************');
+console.log(b(factorial,8,10,10));
+//console.log(b(factorial,10));
+
