@@ -1,6 +1,9 @@
-var str = ";key,value;methodName,|return true|;"
-parser(str);
-
+//var str = ";key,value;methodName,|return true|;";
+//var parseObj = parser(str);
+//console.log(parseObj.methodName());
+var str = ";key,value;methodName,|function (a) { return a + 1; }|;"
+var parseObj = parser(str);
+//console.log(parseObj.methodName(3));
 
 
 function parser(str) {
@@ -17,7 +20,7 @@ function parser(str) {
 			var nameArray = simplerElements.pop().trim();
 			searchSimpler(simplerElements);
 			outObj[nameArray] = [];
-			for(var i = 0 ;i<elementsArray.length; i++){
+			for(var i = 0 ; i < elementsArray.length; i++){
 				var current = elementsArray[i].split(',');
 				var currentArray = [];
 				currentArray[current[0].trim()] = current[1].trim();
@@ -34,11 +37,35 @@ function parser(str) {
 		var patt = /[|]/ig; 
 		for(var i = 0; i < str.length ; i ++ ){
 			if (patt.test(elementsArray[i])) {
-				console.log(elementsArray[i]);
+				var elements = elementsArray[i].split(',')
+				var nameFun = elements[0];
+				var bodyFunc = elements[1];
+				bodyFunc += elementsArray[i];
+				var startIndex = bodyFunc.indexOf('{');
+				if (startIndex > 0) {
+					for(++i; i < elementsArray.length; i++){
+						bodyFunc += elementsArray[i + 1];
+						if (patt.test(elementsArray[i])) {
+							break; 
+						}
+					}
+				}
+				console.log('name is --  ' + nameFun);
+				console.log('body Func is ---' +  bodyFunc);
+
+				//outObj[nameFun] = new Function(bodyFunc);
 			}
 		}
 
+		function selector(select){
+
+
+		
 	}
+
+	}
+
+
 
 	function searchSimpler(elements){
 		for(var i=0; i<elements.length; i++){
