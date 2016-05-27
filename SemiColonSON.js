@@ -1,16 +1,28 @@
-var str = ";key,value;methodName,|return true|;";
+//var str = ";key,value;methodName,|return true|;";
 //var parseObj = parser(str);
 //console.log(parseObj.methodName());
-//var str = ";key,value;methodName,|function (a) { return a + 1; }|;"
+var str = ";key,value;methodName,|function (a) { return a + 1; }|;"
 var parseObj = parser(str);
-//console.log(parseObj.methodName(3));
+console.log(parseObj);
+console.log(parseObj.methodName(5));
+
 
 
 function parser(str) {
 	var outObj = {};
-	searchArray(str);
-	searchSimpler(str);
+	var elementsToObj = searchArray(str);
+	for (var counter = 0; counter < elementsToObj.length; counter++) {
+		var current = elementsToObj[counter].trim();
+		if(current.length > 0){
+			if (searchFunction(elementsToObj[counter])) {
+				continue;
+			}else{
+				searchSimpler(elementsToObj[counter]);
+			}
+		}
+	}
 	return outObj;
+
 
 	function searchArray(){
 		var position = str.search(':');
@@ -26,62 +38,47 @@ function parser(str) {
 				currentArray[current[0].trim()] = current[1].trim();
 				outObj[nameArray].push(currentArray);
 			}
-		}else{
-			searchSimpler(str.split(';'))
+			return simplerElements;
 		}
+		return str.split(';');
 	}
 
 
-	function searchFunction(){
-		var elementsArray = str.split(';')
+	function searchFunction(element){
 		var patt = /[|]/ig; 
-		for(var i = 0; i < str.length ; i ++ ){
-			if (patt.test(elementsArray[i])) {
-				var elements = elementsArray[i].split(',')
-				var nameFun = elements[0];
-				var allFunc = elements[1];
-				var startIndex = allFunc.indexOf('{');
-				if (startIndex > 0) {
-					for(++i; i < elementsArray.length; i++){
-						allFunc += elementsArray[i];
-						if (patt.test(elementsArray[i])) {
-							break; 
-						}
+		if (patt.test(element)) {
+			var elements = element.split(',')
+			var nameFun = elements[0];
+			var allFunc = elements[1];
+			var startIndex = allFunc.indexOf('{');
+			if (startIndex > 0) {
+				for(++counter; counter < elementsToObj.length; counter++){
+					allFunc += elementsToObj[counter];
+					if (patt.test(elementsToObj[counter])) {
+						break; 
 					}
-					var varFun = selector(allFunc,'(',')');
-					console.log(varFun);
-					var bodyFun = selector(allFunc,'{', '}')
-					console.log(bodyFun);
-					outObj[nameFun] = new Function(varFun , bodyFun);
-				}else{
-					var bodyFun = selector(allFunc,'|','|')
-					outObj[nameFun] = new Function(bodyFun);
 				}
+				var varFun = selector(allFunc,'(',')');
+				var bodyFun = selector(allFunc,'{', '}')
+				outObj[nameFun] = new Function(varFun , bodyFun);
+
+			}else{
+				var bodyFun = selector(allFunc,'|','|')
+				outObj[nameFun] = new Function(bodyFun);
 			}
+			return true;
 		}
-
-
 		function selector(select,startBound,endBound){
 			var startIndex  = select.indexOf(startBound);
 			var endIndex = select.indexOf(endBound);
 			return select.slice(startIndex + 1,endIndex);
 		}
-
-
-
 	}
 
-
-
-	function searchSimpler(elements){
-		for(var i=0; i<elements.length; i++){
-			var current = elements[i].trim();
-			if(current.length > 0){
-				if (current.search(',') !=-1) {
-					var innerObj = current.split(',');
-					outObj[innerObj[0]] = innerObj[1];
-				}
-			}
+	function searchSimpler(element){
+		if (current.search(',') !=-1) {
+			var innerObj = current.split(',');
+			outObj[innerObj[0]] = innerObj[1];
 		}
 	}
 }
