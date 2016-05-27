@@ -13,6 +13,7 @@ function factorial (n){
 function memorized (){
 	var memory = [];
 	return function (fun,param){
+		
 		if (memory[fun] && memory[fun][param] ){
 			console.log("buffered arg  is " +  param);
 			return memory[fun][param];

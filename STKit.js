@@ -1,7 +1,7 @@
  var STKit = (function() {
  	return {
  		memorized: memorized,
- 		advancedMemorized: advancedMemorized,
+		advancedMemorized: advancedMemorized,
  		isArrayLike: isArrayLike,
  		dabehaviorizer: dabehaviorizer,
  		haviorizer: haviorizer,
@@ -9,7 +9,7 @@
  	};
  })();
 
- module.exports.STKit = STKit;
+ module.exports = STKit;
 
 
  function parser(str) {
@@ -94,7 +94,6 @@
  	if (null == obj || 'object' != typeof obj) {
  		return obj;
  	}
-
  	var delFunction = [];
  	if (isBehaviorSeparate) {
  		var copyObj = (JSON.parse(JSON.stringify(obj)));
@@ -158,7 +157,7 @@
 
  function memorized() {
  	var memory = [];
- 	return function(fun, param) {
+ 	return function(fun, param){
  		if (memory[fun] && memory[fun][param]) {
  			return memory[fun][param];
  		} else {
