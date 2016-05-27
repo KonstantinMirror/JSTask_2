@@ -8,8 +8,8 @@ var parseObj = parser(str);
 
 function parser(str) {
 	var outObj = {};
-	searchFunction(str);
-	console.log(outObj);
+	searchArray(str);
+	searchSimpler(str);
 	return outObj;
 
 	function searchArray(){
@@ -53,13 +53,14 @@ function parser(str) {
 					var bodyFun = selector(allFunc,'{', '}')
 					console.log(bodyFun);
 					outObj[nameFun] = new Function(varFun , bodyFun);
-
 				}else{
 					var bodyFun = selector(allFunc,'|','|')
 					outObj[nameFun] = new Function(bodyFun);
 				}
 			}
 		}
+
+
 		function selector(select,startBound,endBound){
 			var startIndex  = select.indexOf(startBound);
 			var endIndex = select.indexOf(endBound);

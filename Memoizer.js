@@ -1,14 +1,4 @@
 
-//	var a = memorized();
-//	console.log(a(factorial,3));
-//	console.log(a(factorial,10));
-//	console.log(a(factorial,3));
-//	console.log(a(factorial,10));
-//	console.log(a(factorial,3));
-//	console.log(a(factorial,11));
-//	console.log(a(factorial,5));
-//	console.log(a(factorial,5));
-
 
 
 
@@ -69,18 +59,9 @@ function advancedMemorized (){
 				memory[currentFun][param] = currentFun.apply(this,param);
 				console.log("calculate arg");
 				return memory[currentFun][param]
-		}
-	}	
-}
+			}
+		}	
+	}
 }
 
-var b = advancedMemorized();
-console.log(b(factorial,10,10,10));
-console.log('**********************');
-console.log(b(factorial,10,10,10));
-console.log('**********************');
-console.log(b(factorial,10,10,10,10));
-console.log('**********************');
-console.log(b(factorial,8,10,10));
-//console.log(b(factorial,10));
 
